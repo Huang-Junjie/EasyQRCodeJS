@@ -180,7 +180,8 @@ var qrcode = new QRCode(DOM_object, options_object);
 			colorDark : "#000000",
 			colorLight : "#ffffff",
 			correctLevel : QRCode.CorrectLevel.H, // L, M, Q, H
-			dotScale: 1 // Must be greater than 0, less than or equal to 1. default is 1
+			dotScale: 1, // Must be greater than 0, less than or equal to 1. default is 1
+			dotShape: "Square" // "Square", "Round"
 			
 			// ====== Quiet Zone
 			/*

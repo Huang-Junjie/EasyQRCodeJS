@@ -1,11 +1,14 @@
 {
-	"name": "easyqrcodejs",
+	"name": "@frex/easyqrcodejs",
 	"version": "3.6.0",
-	"description": "A feature-rich cross-browser QRCode generator for pure javascript. Support Dot style, Logo, Background image, Colorful, Title, etc. Support Angular, Vue.js, React framework.(Running with DOM on client side)",
+	"description": "A fork of feature-rich cross-browser QRCode generator EasyQRCodeJs for pure javascript. Support Dot style, Dot shape, Logo, Background image, Colorful, Title, etc. Support Angular, Vue.js, React framework.(Running with DOM on client side)",
 	"main": "dist/easy.qrcode.min.js",
 	"scripts": {},
-	"homepage": "https://github.com/ushelp/EasyQRCodeJS#readme",
+	"homepage": "https://github.com/hexspeak/EasyQRCodeJS#readme",
 	"author": "Ray <inthinkcolor@gmail.com>",
+	"contributors": [{
+		"name": "HexSpeak <hexspeak3@gmail.com>"
+	}],
 	"directories": {
 		"dist": "dist",
 		"src": "src",
@@ -13,7 +16,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ushelp/EasyQRCodeJS.git"
+		"url": "git+https://github.com/hexspeak/EasyQRCodeJS.git"
 	},
 	"keywords": [
 		"qrcode",
@@ -31,7 +34,7 @@
 		"qrcode client side"
 	],
 	"bugs": {
-		"url": "https://github.com/ushelp/EasyQRCodeJS/issues "
+		"url": "https://github.com/hexspeak/EasyQRCodeJS/issues "
 	},
 	"license": "MIT",
 	"dependencies": {},

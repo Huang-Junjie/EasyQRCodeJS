@@ -1492,15 +1492,22 @@
 					for (var col = 0; col < nCount; col++) {
 						var nLeft = col * nWidth + _htOption.quietZone;
 						var nTop = row * nHeight + _htOption.quietZone;
+						var nowDotScale = _htOption.dotScale;
+						var nowDotShape = _htOption.dotShape;
 
 						var bIsDark = oQRCode.isDark(row, col);
 
 						var eye = oQRCode.getEye(row, col); // { isDark: true/false, type: PO_TL, PI_TL, PO_TR, PI_TR, PO_BL, PI_BL };
 
+						_oContext.beginPath();
 						if (eye) {
 							// Is eye
 							bIsDark = eye.isDark;
 							var type = eye.type;
+							if (type.substring(0,1) === 'P') {
+								nowDotScale = 1;
+								nowDotShape = 'Square';
+							}
 
 							// PX_XX, PX, colorDark, colorLight
 							var eyeColorDark = _htOption[type] || _htOption[type.substring(0, 2)] || _htOption.colorDark;
@@ -1508,9 +1515,7 @@
 							_oContext.lineWidth = 0;
 							_oContext.strokeStyle = bIsDark ? eyeColorDark : _htOption.colorLight;
 							_oContext.fillStyle = bIsDark ? eyeColorDark : _htOption.colorLight;
-
-							_oContext.fillRect(nLeft, _htOption.titleHeight + nTop, nWidth, nHeight);
-
+							drawDot(nLeft, nTop, nWidth, nHeight, _htOption.titleHeight, nowDotScale, nowDotShape);
 						} else {
 							_oContext.lineWidth = 0;
 							_oContext.strokeStyle = bIsDark ? _htOption.colorDark : _htOption.colorLight;
@@ -1519,22 +1524,17 @@
 							var nowDotScale = _htOption.dotScale;
 							if (row == 6) {
 								// Timing Pattern 
-								nowDotScale = 1;
 								var timingHColorDark = _htOption.timing_H || _htOption.timing || _htOption.colorDark;
 								_oContext.fillStyle = bIsDark ? timingHColorDark : _htOption.colorLight;
 								_oContext.strokeStyle = _oContext.fillStyle;
-								_oContext.fillRect(nLeft + nWidth * (1 - nowDotScale) / 2, _htOption.titleHeight + nTop + nHeight * (1 -
-									nowDotScale) / 2, nWidth * nowDotScale, nHeight * nowDotScale);
+								drawDot(nLeft, nTop, nWidth, nHeight, _htOption.titleHeight, nowDotScale, nowDotShape);
 							} else if (col == 6) {
 								// Timing Pattern 
-								nowDotScale = 1;
 								var timingVColorDark = _htOption.timing_V || _htOption.timing || _htOption.colorDark;
 								_oContext.fillStyle = bIsDark ? timingVColorDark : _htOption.colorLight;
 								_oContext.strokeStyle = _oContext.fillStyle;
-								_oContext.fillRect(nLeft + nWidth * (1 - nowDotScale) / 2, _htOption.titleHeight + nTop + nHeight * (1 -
-									nowDotScale) / 2, nWidth * nowDotScale, nHeight * nowDotScale);
+								drawDot(nLeft, nTop, nWidth, nHeight, _htOption.titleHeight, nowDotScale, nowDotShape);
 							} else {
-
 								if (_htOption.backgroundImage) {
 
 									if (_htOption.autoColor) {
@@ -1549,9 +1549,7 @@
 										nowDotScale) / 2, nWidth * nowDotScale, nHeight * nowDotScale);
 								} else {
 									_oContext.strokeStyle = _oContext.fillStyle;
-									_oContext.fillRect(nLeft + nWidth * (1 - nowDotScale) / 2, _htOption.titleHeight + nTop + nHeight * (1 -
-										nowDotScale) / 2, nWidth * nowDotScale, nHeight * nowDotScale);
-
+									drawDot(nLeft, nTop, nWidth, nHeight, _htOption.titleHeight, nowDotScale, nowDotShape);
 								}
 							}
 						}
@@ -1640,6 +1638,19 @@
                     
 				}
 
+			}
+
+			function drawDot(left, top, width, height, titleHeight, dotScale, dotShape) {
+				if (dotShape === 'Round') {
+					_oContext.arc(left + width / 2, titleHeight + top + height / 2,
+						width * dotScale / 2, 0, 2 * Math.PI);
+					_oContext.fill();
+				} else {
+					_oContext.fillRect(left + width * (1 - dotScale) / 2,
+						titleHeight + top + height * (1 - dotScale) / 2,
+						width * dotScale,
+						height * dotScale);
+				}
 			}
 
 		};
@@ -1763,6 +1774,7 @@
 			correctLevel: QRErrorCorrectLevel.H,
 
 			dotScale: 1, // Must be greater than 0, less than or equal to 1. default is 1
+			dotShape: 'Square', // Square or Round
             
             quietZone: 0,
             quietZoneColor: 'transparent', 
@@ -1840,12 +1852,17 @@
         
 		if (this._htOption.dotScale < 0 || this._htOption.dotScale > 1) {
 			console.warn(this._htOption.dotScale +
-				" , is invalidate, dotScale must greater than 0, less than or equal to 1, now reset to 1. ")
+				" , is invalid, dotScale must greater than 0, less than or equal to 1, now reset to 1. ")
 			this._htOption.dotScale = 1;
+		}
+		if (this._htOption.dotShape !== 'Square' && this._htOption.dotShape !== 'Round') {
+			console.warn(this._htOption.dotShape +
+				" , is invalid, dotShape must be either Square or Round, now reset to Square. ")
+			this._htOption.dotShape = 'Square';
 		}
 		if (this._htOption.backgroundImageAlpha < 0 || this._htOption.backgroundImageAlpha > 1) {
 			console.warn(this._htOption.backgroundImageAlpha +
-				" , is invalidate, backgroundImageAlpha must between 0 and 1, now reset to 1. ")
+				" , is invalid, backgroundImageAlpha must between 0 and 1, now reset to 1. ")
 			this._htOption.backgroundImageAlpha = 1;
 		}
 
